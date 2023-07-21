@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PhishShield</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  </head>
+  <style>
+    body {
+            margin: 0;
+            padding: 0;
+            color: #ffffff;
+            font-family: 'Your Custom Font', sans-serif;
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ url_for('static', filename='backgrnd-img.jpg') }}");
+            background-size: cover;
+            background-color: rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .title {
+            font-size: 64px;
+            font-weight: bold;
+            text-align: center;
+            /* color: transparent; Hide the text initially */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 3px;
+            margin-top: 50px;
+            /* Use a gradient for the title text */
+            background: linear-gradient(to right, #ff4500, #ff8c00);
+            /* Clip the gradient text to create a beautiful effect */
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+    .form-container {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .form-container input {
+        margin-right: 10px;
+        border-radius: 5px;
+        padding: 10px 15px;
+        border: 1px solid #ffffff;
+        background-color: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+    }
+
+    .form-container button {
+        border-radius: 5px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        border: none;
+        color: #ffffff;
+    }
+
+    .form-container button:hover {
+        background-color: #0056b3;
+    }
+
+    .prediction-text {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #ffffff;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .prediction-good {
+        background-color: #28a745;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 50px;
+    }
+
+    .prediction-bad {
+        background-color: #dc3545;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 50px;
+    }
+
+    .form-group {
+            margin-bottom: 20px;
+        }
+      
+      input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px #3b2923; /* Border color when not focused */
+            border-radius: 5px;
+            outline: none;
+            color: #000000; /* Text color */
+            transition: border-color 0.3s ease; /* Smooth border color transition */
+        }
+
+        input[type="text"]:focus {
+            border-color: #ffff /* Border color when focused */
+        }
+
+</style>
+  <body>
+    <div class="background-container">
+      <h1 class="title">
+        <span>P</span><span>h</span><span>i</span><span>s</span><span>h</span><span>S</span><span>h</span><span>i</span><span>e</span><span>l</span><span>d</span>
+    </h1>
+      <div class="container mt-5">
+          <div class="row">
+            <div class="col-md-6 offset-md-3">
+              <form action="/predict" method="POST">
+                <div class="form-group">
+                  <label for="urlInput">Enter URL:</label>
+                  <input type="text" class="form-control" id="urlInput" name="urlInput" placeholder="https://example.com" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Scan URL</button>
+              </form>
+            </div>
+            <br>
+            <br>
+            <div class="prediction-text">
+              {% if prediction_text %}
+                  {% if prediction_text == 'This is good url' %}
+                      <div class="prediction-good">{{ prediction_text }}</div>
+                  {% else %}
+                      <div class="prediction-bad">{{ prediction_text }}</div>
+                  {% endif %}
+              {% endif %}
+          </div>
+          </div>
+        </div>
+
+    </div>
+    <script>
+      // Function to remove the prediction banner after a delay
+      function removePredictionBanner() {
+          var predictionElement = document.querySelector('.prediction-text');
+          if (predictionElement) {
+              predictionElement.remove();
+          }
+      }
+
+      // Check if the page is reloaded
+      if (performance.navigation.type === 1) {
+          // Remove the prediction banner after 2 seconds when the page is reloaded
+          setTimeout(removePredictionBanner, 0);
+      }
+  </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>
